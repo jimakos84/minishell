@@ -1,29 +1,37 @@
 # minishell
-	minishell with thiwanka
+Minishell with Thiwnaka
 
-### proper implemention of a shell
-	https://github.com/codecrafters-io/build-your-own-x?tab=readme-ov-file#build-your-own-shell
+---
 
-### minishell example projects
-	https://github.com/cclaude42/minishell
-	https://github.com/mcombeau/minishell
+### Proper Implementation of a Shell
+[Build Your Own Shell - Codecrafters](https://github.com/codecrafters-io/build-your-own-x?tab=readme-ov-file#build-your-own-shell)
 
-### bash reference manual
-	https://www.gnu.org/software/bash/manual/bash.html
+---
 
+### Minishell Example Projects
+- [cclaude42/minishell](https://github.com/cclaude42/minishell)
+- [mcombeau/minishell](https://github.com/mcombeau/minishell)
 
-### allowd functions
+---
+
+### Bash Reference Manual
+[Bash Manual - GNU](https://www.gnu.org/software/bash/manual/bash.html)
+
+---
+
+### Allowed Functions
 
 #### 01). `readline`
+```c
+char *readline (char *prompt);
+```
 
-	```C
-	char *readline (char *prompt);
-	```
+So, exapmle of using the function
+```c
+char *line = readline("Enter a line: ");
+```
+`readline` returns the text of the line read.  A blank line returns the empty string.  If `EOF` is encountered while reading a line, and the line is empty, `NULL` is returned.  If an `EOF` is read with a non-empty line, it is treated as a newline.
 
-	So, as an example
-	```C
-	char *line = readline ("Enter a line: ");
-	```
 
 #### rl_clear_history
 #### rl_on_new_line
