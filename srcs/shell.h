@@ -5,6 +5,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 

@@ -2,7 +2,9 @@ TARGET = minishell
 
 CMD = cc
 
-CFLAGS = -Wall -Werror -Wextra -lreadline -g
+CFLAGS = -Wall -Werror -Wextra -g
+
+LDFLAGS = -lreadline
 
 SRCS = \
 	main.c\
@@ -12,7 +14,7 @@ OBJS = $(SRCS:.c=.o)
 all : $(TARGET)
 
 $(TARGET) : $(OBJS)
-	$(CMD) $(CFLAGS) $(OBJS) -o $(TARGET)
+	$(CMD) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean :
 	rm -f $(OBJS)
