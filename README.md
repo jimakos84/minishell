@@ -14,8 +14,17 @@
 
 ### allowd functions
 
-#### 01). readline
-	
+#### 01). `readline`
+
+	```C
+	char *readline (char *prompt);
+	```
+
+	So, as an example
+	```C
+	char *line = readline ("Enter a line: ");
+	```
+
 #### rl_clear_history
 #### rl_on_new_line
 #### rl_replace_line
