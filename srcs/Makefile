@@ -1,4 +1,19 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dvlachos <dvlachos@student.hive.fi>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/25 11:46:44 by dvlachos          #+#    #+#              #
+#    Updated: 2025/03/25 11:51:53 by dvlachos         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 TARGET = minishell
+
+LIBFT_DIR = ./libft
+LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
 CMD = cc
 
@@ -11,16 +26,21 @@ SRCS = \
 
 OBJS = $(SRCS:.c=.o)
 
-all : $(TARGET)
+all : $(TARGET) 
 
-$(TARGET) : $(OBJS)
-	$(CMD) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+$(TARGET) : $(OBJS) $(LIBFT_LIB)
+	$(CMD) $(CFLAGS) $^ -o $@ $(LDFLAGS) -L$(LIBFT_DIR) -lft
+
+$(LIBFT_LIB):
+	$(MAKE) -C $(LIBFT_DIR)
 
 clean :
 	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean : clean
 	rm -f $(TARGET)
+	rm -f $(LIBFT_LIB)
 
 re : fclean all
 

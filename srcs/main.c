@@ -1,10 +1,11 @@
 #include "shell.h"
+#include <sys/wait.h>
 
 int	main(void)
 {
 	char *line;
-	char *token;
-	char *delimiter = "&$ |";
+	char **token;
+	int	status;
 
 	while ((line = readline("~minishell~ >$")) != NULL)
 	{
@@ -15,26 +16,17 @@ int	main(void)
 		else
 		{
 			add_history(line);
-			/***
-			 * strtok() is used as split() (tokenize) a string into smaller parts,
-			 * based on delimiter characters (like commas, spaces, etc.) provieded.
-			 * char *strtok(char *str, const char *delim)
-			 */
-			token = strtok(line, delimiter);
-			while (token != NULL)
-			{
-				printf("%s\n", token);
-				token = strtok(NULL, delimiter);
-			}
-			free(token);
+			token = ft_split(line, ' ');
+			if (fork() == 0)
+				execvp(token[0], token);
+			wait(&status);
 		}
 		free(line);
 	}
 	free(line);
 	return (EXIT_SUCCESS);
 }
-
-/**
+/*
  *prgram logic
  *while (valid_input_line_from_fd)
  {
@@ -48,4 +40,16 @@ int	main(void)
 	}
  }
  return (EXIT_SUCCESS);
- */
+
+
+int	main(int ac, char **av)
+{
+	(void)ac;
+	int	status;
+
+	if (fork() == 0)
+		execvp(av[1], av + 1);
+	wait(&status);
+	return (0);
+}
+*/
