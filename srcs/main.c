@@ -1,24 +1,28 @@
 #include "shell.h"
-#include <sys/wait.h>
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
 	char *line;
 	char **token;
 	int	status;
+	char	*cwd = NULL;
+	char	*path = "/bin/";
+	char	*_path;
+	(void)ac;
+	(void)av;
 
-	while ((line = readline("~minishell~ >$")) != NULL)
+
+	printf("%s\n", getcwd(cwd, BUFSIZ));
+	while ((line = readline("👀minishel👀$")) != NULL)
 	{
-		if (strcmp("exit", line) == 0)
+		if (ft_strncmp("exit", line, 4) == 0)
 			break;
-		else if (strcmp("clear", line) == 0)
-			rl_clear_history();
 		else
 		{
-			add_history(line);
 			token = ft_split(line, ' ');
+			_path = ft_strjoin(path, token[0]);
 			if (fork() == 0)
-				execvp(token[0], token);
+				execve(_path, token, envp);
 			wait(&status);
 		}
 		free(line);
