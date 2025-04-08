@@ -282,7 +282,16 @@ sockets, or special devices.
 ```
 #### 36). `open`
 ```c
+int open(const char *pathname, int flags, mode_t mode);
 ```
+Parameters:
+  * pathname: The path to the file you want to open.
+  * flags: These are options that define the behavior of the open operation (e.g., ```O_RDONLY```, ```O_WRONLY```, ```O_RDWR```, ```O_CREAT```).
+  * mode: The file permission settings, required when creating a new file (typically used with ```O_CREAT```). It's given in octal format (e.g., 0644).
+Return value:
+  On success, it returns a file descriptor (a non-negative integer).
+  On failure, it returns -1, and errno is set to indicate the error.
+
 #### 37). `read`
 ```c
 ```
