@@ -23,8 +23,8 @@ int execute(t_shell *mini)
 			if(current->next)
 				dup2(fd[index][1], STDOUT_FILENO);
 			close_fds(fd, limit);
-			if((execve(current->command, current->args, mini->copy_env)) == -1)
-				syntax_error("Command execution failed");
+			if((execve(current->command, current->args, mini->initenv->copy_env)) == -1)
+					perror(current->command);
 		}
 		current = current->next;
 		index++;

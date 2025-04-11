@@ -85,11 +85,11 @@ char	**copy_env(char **envp)
  * custome implementaion of getenv() library function
 */
 
-char	*extract_env_value(t_shell *mini, char *name)
+char	*extract_env_value(t_initenv *initenv, char *name)
 {
 	t_env	*temp;
 
-	temp = mini->env;
+	temp = initenv->env;
 	while (temp)
 	{
 		if (ft_strncmp(name, temp->name, sizeof(name)) == 0)

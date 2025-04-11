@@ -4,7 +4,7 @@ static void	updatewd(t_shell *mini, char *newpwd, char *oldpwd)
 {
 	t_env	*env;
 
-	env = mini->env;
+	env = mini->initenv->env;
 	while (env)
 	{
         if (ft_strncmp("PWD", env->name, 3) == 0)
@@ -28,38 +28,37 @@ int	builtin_cd(t_shell *mini)
 	char	*oldpwd;
 
 	oldpwd = getcwd(NULL, 0);
-	home = extract_env_value(mini, "HOME");
+	home = extract_env_value(mini->initenv, "HOME");
 	dir = NULL;
 	if (!home)
 	{
 		ft_putstr_fd("cd: HOME not set\n", 2);
 		return (1);
 	}
-	if (!mini->tokensar[1])
+	if (!mini->cmds->args[1])
 		chdir(home);
 	else
 	{	
-		if ((ft_strncmp("~", mini->tokensar[1], 1) == 0))
+		if ((ft_strncmp("~", mini->cmds->args[1], 1) == 0))
 		{
-			if (mini->tokensar[1] && !mini->tokensar[1][1])
+			if (mini->cmds->args[1] && !mini->cmds->args[1][1])
 				dir = home;
 			else
 			{
-				dir = ft_strjoin(home, ft_strchr(mini->tokensar[1], '~') + 1);
+				dir = ft_strjoin(home, ft_strchr(mini->cmds->args[1], '~') + 1);
 			}
 		}
 		else
 		{
 			dir = ft_strjoin(getcwd(NULL, 0), "/");
-			dir = ft_strjoin(dir, mini->tokensar[1]);
+			dir = ft_strjoin(dir, mini->cmds->args[1]);
 		}
 		if (chdir(dir))
 		{
-			printf("cd: %s: No such file or directory\n", mini->tokensar[1]);
+			printf("cd: %s: No such file or directory\n", mini->cmds->args[1]);
 			return (1);
 		}
 	}
-    printf("%s\n%s\n", getcwd(NULL,0), oldpwd);
 	updatewd(mini, getcwd(NULL, 0), oldpwd);
 	return (0);
 }
@@ -71,8 +70,8 @@ int	builtin_env(t_shell *mini)
 {
 	t_env	*temp;
 
-	temp = mini->env;
-	if (!mini->tokensar[1])
+	temp = mini->initenv->env;
+	if (!mini->cmds->args[1])
 	{
 		while (temp)
 		{
@@ -87,30 +86,58 @@ int	builtin_env(t_shell *mini)
 		return (1);
 }
 
+int	builtin_pwd(void)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	printf("%s\n", pwd);
+	return (2);
+}
 /**
  * to check if the command is in the built_in commands list, if yes then use the custome one
 */
 
 int	check_builtin(t_shell *mini)
 {
-    if (mini->tokensar && mini->tokensar[0])
+	char	*cmd;
+
+	cmd = mini->cmds->cmd;
+    if (mini->cmds->cmd)
     {
-	    if (ft_strncmp("cd", mini->tokensar[0], 2) == 0)
+	    if (ft_strncmp("cd", cmd, sizeof(cmd)) == 0)
 	    {   
 	    	if (builtin_cd(mini))
-	    		return (2);
-		    else
-			    return (1);
+				return (1);
+			else
+				return (2);
 	    }
-	    if (ft_strncmp("env", mini->tokensar[0], 3) == 0)
+	    if (ft_strncmp("env", cmd, sizeof(cmd)) == 0)
 	    {
 	    	if (builtin_env(mini))
-		    	return (2);
-		    else
-	    		return (1);
+		    	return (1);
+			else
+				return (2);
 	    }
+		if (ft_strncmp("pwd", cmd, sizeof(cmd)) == 0)
+		{
+			if (builtin_pwd())
+				return (1);
+			else
+				return (2);
+		}
+		if (ft_strncmp("exit", cmd, sizeof(cmd)) == 0)
+		{
+			printf("exit\n");
+			exit (mini->status);
+		}
+		if (ft_strncmp("unset", cmd, sizeof(cmd)) == 0)
+		{
+			builtin_unset(mini, cmd);
+			return (2);
+		}
 	    else
 		    return (0);
     }
-	return (1);
+	return (0);
 }

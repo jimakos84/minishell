@@ -1,6 +1,6 @@
 #include "../includes/shell.h"
 
-int activate_shell(char *input, char **envp)
+int activate_shell(char *input, t_initenv *env)
 {
 	int status = 0;
 	t_shell *mini = malloc(sizeof(t_shell));
@@ -9,20 +9,15 @@ int activate_shell(char *input, char **envp)
 	mini->num_cmds = 0;
 	mini->tokens = NULL;
 	mini->cmds = NULL;
-	mini->env = NULL;
+	mini->initenv = env;
 	mini->trim = NULL;
-	mini->copy_env = copy_env(envp);
-	list_env(&mini->env, envp);
-	if (tokenize(mini, input))
-		return (1);
+	mini->status = 0;
 	if((status = input_validate(input)))
 		return (1);
 	if((status = extract_tokens(&mini->tokens, input)))
 		return (1);
 	if((status = parse_and_expand(mini)))
 		return (1);
-	if (check_builtin(mini) == 1)
-		return (0);
 	if((status = execute(mini)))
 		return (1);
 	if((status = clear_and_exit(mini)))

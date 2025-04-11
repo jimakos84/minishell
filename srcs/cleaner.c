@@ -8,8 +8,6 @@ int clear_and_exit(t_shell *mini)
 {
 	clear_commands(mini->cmds);
 	clear_tokens(mini->tokens);
-	clear_array(mini->copy_env);
-	free(mini);
 	return (0);
 }
 
@@ -21,7 +19,6 @@ int clear_commands(t_cmd *cmds)
 		cmd = current;
 		current = current->next;
 		free(cmd->command);
-		clear_array(cmd->args);
 	}
 	return (0);
 }

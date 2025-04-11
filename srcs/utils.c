@@ -103,3 +103,24 @@ int	quotes_checker(char *input, int len)
 	}
 	return (in_quote);
 }
+
+bool	builtin_cmd(char *cmd)
+{
+	static char	*builtins[6];
+	int		i;
+
+	i = 0;
+	builtins[0] = "exit";
+	builtins[1] = "cd";
+	builtins[2] = "env";
+	builtins[3] = "pwd";
+	builtins[4] = "unset";
+	builtins[5] = NULL;
+	while (builtins[i])
+	{
+		if (ft_strncmp(cmd, builtins[i], sizeof(cmd)) == 0)
+			return (true);
+		i++;
+	}
+	return (false);
+}

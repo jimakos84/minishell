@@ -8,9 +8,9 @@ static int check_special_character(char *input);
 int input_validate(char *input)
 {
 	if(check_properly_enclosed(input))
-		return (syntax_error("Sysntax Error : unclosed quotes !"));
+		return (syntax_error("syntax error: unclosed quotes\n"));
 	if(check_special_character(input))
-		return (syntax_error("Sysntax Error : unrecognized characters !"));
+		return (syntax_error("syntax error: unrecognized characters\n"));
 	return (0);
 }
 
