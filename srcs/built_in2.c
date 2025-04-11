@@ -3,13 +3,14 @@
 void    remove_env_node(t_env *env, char *key)
 {
     char    *env_key;
-    t_env   *temp;
+    //t_env   *temp;
 
     if (!env || !key)
         return ;
     env_key = env->name;
     if (ft_strncmp(env_key, key, ft_strlen(key)) == 0)
-        
+        return ;
+
 
 }
 void    builtin_unset(t_shell *mini, char *unset)
@@ -23,6 +24,6 @@ void    builtin_unset(t_shell *mini, char *unset)
         return ;
     if (!mini->initenv->env || !extract_env_value(mini->initenv, unset))
         return ;
-    else
-
+    else    
+        return ;
 }
