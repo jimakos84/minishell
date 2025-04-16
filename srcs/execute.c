@@ -1,8 +1,8 @@
 #include "../includes/shell.h"
 
-int close_fds(int fd[][2], int limit);
-int init_pipes(int fd[][2], int limit);
-int wait_for_children(int limit);
+static int close_fds(int fd[][2], int limit);
+static int init_pipes(int fd[][2], int limit);
+static int wait_for_children(int limit);
 
 int execute(t_shell *mini)
 {
@@ -18,14 +18,31 @@ int execute(t_shell *mini)
 			perror("Fork fialed");
 		else if(pid == 0)
 		{
+			if(current->type == OPRD_CMD)
+			{
+				int fd;
+				if ((fd = open(current->filename, O_WRONLY | O_CREAT | O_TRUNC, 0666)) == -1) {
+					perror("File opening failed!");
+					exit (1);
+				}
+				if(dup2(fd, STDOUT_FILENO) == -1)
+				{
+					perror("FD duplication failed!");
+					exit (1);
+				}
+				close(fd);
+			}
 			if(index > 0)
 				dup2(fd[index - 1][0], STDIN_FILENO);
 			if(current->next)
 				dup2(fd[index][1], STDOUT_FILENO);
 			close_fds(fd, limit);
-			//printf("command : %s\n", current->command);
+			// printf("command : %s\n", current->command);
 			if((execve(current->command, current->args, mini->initenv->copy_env)) == -1)
-					perror(current->command);
+			{
+				perror("Command execution failed");
+				exit(1);
+			}
 		}
 		current = current->next;
 		index++;
@@ -35,7 +52,7 @@ int execute(t_shell *mini)
 	return (0);
 }
 
-int init_pipes(int fd[][2], int limit)
+static int init_pipes(int fd[][2], int limit)
 {
 	int i = 0;
 
@@ -50,7 +67,7 @@ int init_pipes(int fd[][2], int limit)
 	return (0);
 }
 
-int wait_for_children(int limit)
+static int wait_for_children(int limit)
 {
 	int i = 0;
 	while(i < limit)
@@ -61,7 +78,7 @@ int wait_for_children(int limit)
 	return (0);
 }
 
-int close_fds(int fd[][2], int limit)
+static int close_fds(int fd[][2], int limit)
 {
 	int i = 0;
 	while(i < limit)
