@@ -34,7 +34,7 @@ static int check_special_character(char *input)
 	int i = 0;
 	char *special_chars = "\\&;,{()}", *str;
 
-	str = in_quotes(input);
+	str = enclosed_in_quotes(input);
 	while(special_chars[i])
 	{
 		if(ft_strchr(input, special_chars[i]))
@@ -53,34 +53,34 @@ static int check_special_character(char *input)
 	return (0);
 }
 
-char *in_quotes(char *input)
-{
-	int i = 0, start = 0, end = 0, len = 0;
-	char *str = NULL;
+// char *in_quotes(char *input)
+// {
+// 	int i = 0, start = 0, end = 0, len = 0;
+// 	char *str = NULL;
 
-	while(input && input[i])
-	{
-		if(input[i] == '\'' || input[i] == '"')
-			str = ft_strchr(input, input[i]);
-		i++;
-	}
-	if(!str)
-		return (NULL);
-	start = str - input;
-	i = ft_strlen(input) - 1;
-	while(input && input[i])
-	{
-		if(input[i] == '\'' || input[i] == '"')
-			str = ft_strrchr(input, input[i]);
-		i--;
-	}
-	if(!str)
-		return (NULL);
-	end = str - input;
-	len = end - start + 1;
-	str = malloc(sizeof(char) * len);
-	if(!str)
-		return (NULL);
-	ft_strlcpy(str, &input[start], (end - start + 2));
-	return (str);
-}
+// 	while(input && input[i])
+// 	{
+// 		if(input[i] == '\'' || input[i] == '"')
+// 			str = ft_strchr(input, input[i]);
+// 		i++;
+// 	}
+// 	if(!str)
+// 		return (NULL);
+// 	start = str - input;
+// 	i = ft_strlen(input) - 1;
+// 	while(input && input[i])
+// 	{
+// 		if(input[i] == '\'' || input[i] == '"')
+// 			str = ft_strrchr(input, input[i]);
+// 		i--;
+// 	}
+// 	if(!str)
+// 		return (NULL);
+// 	end = str - input;
+// 	len = end - start + 1;
+// 	str = malloc(sizeof(char) * len);
+// 	if(!str)
+// 		return (NULL);
+// 	ft_strlcpy(str, &input[start], (end - start + 2));
+// 	return (str);
+// }

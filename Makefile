@@ -2,7 +2,7 @@ TARGET = minishell
 
 CMD = cc
 
-CFLAGS = -Werror -Wall -Wextra 
+CFLAGS = -Werror -Wall -Wextra
 
 LDFLAGS = -lreadline
 
@@ -27,6 +27,8 @@ SRCS = \
 	srcs/envrn.c\
 	srcs/utils.c\
 	srcs/built_in2.c\
+	srcs/redirect.c\
+	srcs/quote.c\
 	main.c\
 
 
