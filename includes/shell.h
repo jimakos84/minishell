@@ -16,6 +16,9 @@
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
 
+# define SMPL_CMD 1
+# define OPRD_CMD 2
+
 /**
  * data node strucutre to hold the tokens extract from input, this node will make a linked list
 */
@@ -40,6 +43,8 @@ typedef struct s_initenv
 
 typedef struct s_cmd
 {
+	int 			type;
+	char			*filename;
 	char 			*cmd;
 	char 			*command;
 	char 			**args;
@@ -65,13 +70,13 @@ void print(t_list *list, char *msg);
 /**
  * Implementaion in srcs/validate.c
 */
-int 	input_validate(char *input);
-char 	*in_quotes(char *input);
+int 	input_validate(char **input);
+//char 	*in_quotes(char *input);
 
 /**
  * Implementaion in srcs/error.c
 */
-int 	syntax_error(char *msg);
+int syntax_error(char *input, char *msg);
 
 /**
  * Implementation in srcs/helper.c
@@ -94,6 +99,7 @@ int 	parse_and_expand(t_shell *mini);
  * Implementaion in srcs/utils.c
 */
 int 	ft_strnmcpy(char **dest, char *src, int n, int m);
+char *ft_strnmdup(char const *src, int n , int m);
 
 /**
  * Implementaion in srcs/execute.c
@@ -121,13 +127,20 @@ int		builtin_env(t_shell *mini);
 int		check_builtin(t_shell *mini);
 int		ft_arraylen(char **envp);
 int		ft_isempty(char *str);
-int		ft_isspace(char c);
 char 	*get_command(char *token);
 int		tokenize(t_shell *mini, char *input);
 int		quotes_checker(char *input, int len);
 bool	builtin_cmd(char *cmd);
 void    builtin_unset(t_shell *mini, char *unset);
 
-
-
+int	ft_isspace(int c);
+t_cmd *handel_pipe(t_shell *mini, t_list *current);
+t_cmd *handel_output(t_shell *mini, char *token);
+t_cmd *handle_quoted(t_shell *mini, char *token);
+char *enclosed_in_quotes(char *input);
+int check_if_quoted(char *input);
+char *remove_quotes(char *str);
+char *set_path_name(t_shell *mini, char *token);
+int get_num_args(char *token);
+char **set_arg_array(int num_args, char *token, char *cmdpath);
 #endif

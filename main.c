@@ -19,6 +19,7 @@ int main (int ac, char **av, char **envp)
 		{
 			if (ft_isempty(input))
 			{
+
 				free(input);
 				continue ;
 			}

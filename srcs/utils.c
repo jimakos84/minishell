@@ -1,5 +1,24 @@
 #include "../includes/shell.h"
 
+char *ft_strnmdup(char const *src, int n , int m)
+{
+	int i = 0;
+	char *dest;
+
+	if(!src || m == 0)
+		return (NULL);
+	dest = malloc(sizeof(char) * ((m - n) + 1));
+	if(!dest)
+		return (NULL);
+	while(src && src[i + n] && (i + n) < m)
+	{
+		dest[i] = src[i + n];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 int ft_strnmcpy(char **dest, char *src, int n, int m)
 {
 	int i = 0;
@@ -75,7 +94,7 @@ int	ft_isempty(char *str)
 	return (1);
 }
 
-int	ft_isspace(char c)
+int	ft_isspace(int c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v')
 		return (1);

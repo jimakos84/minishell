@@ -15,7 +15,7 @@ int execute(t_shell *mini)
 	while(current)
 	{
 		if((pid = fork()) == -1)
-			syntax_error("Fork failed");
+			perror("Fork fialed");
 		else if(pid == 0)
 		{
 			if(index > 0)
@@ -23,6 +23,7 @@ int execute(t_shell *mini)
 			if(current->next)
 				dup2(fd[index][1], STDOUT_FILENO);
 			close_fds(fd, limit);
+			//printf("command : %s\n", current->command);
 			if((execve(current->command, current->args, mini->initenv->copy_env)) == -1)
 					perror(current->command);
 		}
@@ -42,7 +43,7 @@ int init_pipes(int fd[][2], int limit)
 	{
 		if((pipe(fd[i])) == -1)
 		{
-			syntax_error("Pipe creation failed");
+			perror("Pipe creation failed");
 		}
 		i++;
 	}

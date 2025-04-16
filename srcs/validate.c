@@ -1,17 +1,44 @@
 #include "../includes/shell.h"
 
-int input_validate(char *input);
-char *in_quotes(char *input);
+int input_validate(char **input);
+static void input_preprocess(char **input);
 static int check_properly_enclosed(char *input);
 static int check_special_character(char *input);
+static int check_output_character(char *input);
+static char *remove_comments(char *input);
 
-int input_validate(char *input)
+int input_validate(char **input)
 {
-	if(check_properly_enclosed(input))
-		return (syntax_error("syntax error: unclosed quotes\n"));
-	if(check_special_character(input))
-		return (syntax_error("syntax error: unrecognized characters\n"));
+	input_preprocess(input);
+	if(check_properly_enclosed(*input))
+		return (syntax_error(*input ,"Sysntax Error : unclosed quotes !"));
+	if(check_special_character(*input))
+		return (syntax_error(*input ,"Sysntax Error : unrecognized characters !"));
+	if(check_output_character(*input))
+		return (syntax_error(*input ,"Sysntax Error : syntax error near token '>'!"));
 	return (0);
+}
+
+static void input_preprocess(char **input)
+{
+	char *trimmed;
+
+	trimmed = ft_strtrim(remove_comments(*input), " \f\n\r\t\v");
+	*input = ft_strdup(trimmed);
+	free(trimmed);
+}
+
+static char *remove_comments(char *input)
+{
+	char *stream;
+
+	stream = ft_strchr(input,'#');
+	if(stream)
+	{
+		stream = ft_strnmdup(input, 0, (stream - input));
+		return (stream);
+	}
+	return (input);
 }
 
 static int check_properly_enclosed(char *input)
@@ -32,55 +59,64 @@ static int check_properly_enclosed(char *input)
 static int check_special_character(char *input)
 {
 	int i = 0;
-	char *special_chars = "\\&;,{()}", *str;
+	char *special_chars = "\\&;,{()}<", *str;
 
-	str = in_quotes(input);
+	str = enclosed_in_quotes(input);
 	while(special_chars[i])
 	{
 		if(ft_strchr(input, special_chars[i]))
 		{
-			if(str && ft_strchr(str, special_chars[i]))
-			{
-				free(str);
-				return (0);
-			}
-			free(str);
-			return (1);
+			if(!str)
+				return (1);
+			if(str && !ft_strchr(str, special_chars[i]))
+				return (1);
 		}
 		i++;
 	}
-	free(str);
 	return (0);
 }
 
-char *in_quotes(char *input)
+static int check_output_character(char *input)
 {
-	int i = 0, start = 0, end = 0, len = 0;
-	char *str = NULL;
-
-	while(input && input[i])
+	int i = 0;
+	char *str = ft_strchr(input, '>');
+	if(str)
 	{
-		if(input[i] == '\'' || input[i] == '"')
-			str = ft_strchr(input, input[i]);
-		i++;
+		if(str[i + 1] && !ft_isspace(str[i + 1]))
+			{
+				i++;
+				if(str[i] == '>')
+				{
+					if(str[i + 1] && !ft_isspace(str[i + 1]))
+					{
+						i++;
+						if(str[i] == '>')
+							return (1);
+						return (0);
+					}
+					else if(str[i + 1] && ft_isspace(str[i + 1]))
+					{
+						i++;
+						while(str[i] && ft_isspace(str[i]))
+							i++;
+						if(str[i] == '\0' || str[i] == '>')
+							return (1);
+						return (0);
+					}
+					return (1);
+				}
+				return (0);
+			}
+			else if(str[i + 1] && ft_isspace(str[i + 1]))
+			{
+				i++;
+				while(str[i] && ft_isspace(str[i]))
+					i++;
+				if(str[i] == '\0' || str[i] == '>')
+					return (1);
+				return (0);
+			}
+		return (1);
 	}
-	if(!str)
-		return (NULL);
-	start = str - input;
-	i = ft_strlen(input) - 1;
-	while(input && input[i])
-	{
-		if(input[i] == '\'' || input[i] == '"')
-			str = ft_strrchr(input, input[i]);
-		i--;
-	}
-	if(!str)
-		return (NULL);
-	end = str - input;
-	len = end - start + 1;
-	str = malloc(sizeof(char) * len);
-	if(!str)
-		return (NULL);
-	ft_strlcpy(str, &input[start], (end - start + 2));
-	return (str);
+	return (0);
 }

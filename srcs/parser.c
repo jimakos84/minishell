@@ -4,42 +4,63 @@ void expand(t_shell *mini, t_list *list);
 int get_num_args(char *token);
 void get_args(char **args, char *token, int size);
 char *get_command(char *token);
-char *set_path_name(char *token, t_shell *mini);
+char *set_path_name(t_shell *mini, char *token);
 char **set_arg_array(int num_args, char *token, char *cmdpath);
 
 int parse_and_expand(t_shell *mini)
 {
-	char	*cmd;
+	//char	*cmd;
 
 	expand(mini, mini->tokens);
-	cmd = mini->cmds->cmd;
-	if(!mini->cmds->command || builtin_cmd(cmd))
-	{
-		if (check_builtin(mini) == 2)
-			return (2);
-		else
-			return (1);
-	}
+
+	/**
+	 * Need to look in to this part as we are getting a segfault if we un comment this
+	 **/
+	// cmd = mini->cmds->cmd;
+	// if(!mini->cmds->command || builtin_cmd(cmd))
+	// {
+
+	// 	if (check_builtin(mini) == 2)
+	// 		return (2);
+	// 	else
+	// 		return (1);
+
+	// }
 	return (0);
 }
 
 void expand(t_shell *mini, t_list *list)
 {
 	t_list *current = list;
-	t_cmd *cmd;
-	
-	while (current)
+	t_cmd *cmd = NULL;
+
+	while(current)
 	{
-		cmd = malloc(sizeof(t_cmd));
-		cmd->cmd = get_command(current->token);
-		cmd->command = set_path_name(current->token, mini);
-		cmd->num_args = get_num_args(current->token);
-		cmd->args = set_arg_array(cmd->num_args, current->token, cmd->command);
-		cmd->next = NULL;
+		if(check_if_quoted(current->token))
+			cmd = handle_quoted(mini, current->token);
+		else if(ft_strchr(current->token, '>'))
+			cmd = handel_output(mini, current->token);
+		else
+			cmd = handel_pipe(mini, current);
 		mini->cmds = list_add_command(mini->cmds, cmd);
+		cmd = NULL;
 		mini->num_cmds++;
 		current = current->next;
 	}
+}
+
+t_cmd *handel_pipe(t_shell *mini, t_list *current)
+{
+	t_cmd *cmd = malloc(sizeof(t_cmd));
+	if(!cmd)
+			return (NULL);
+	cmd->type = SMPL_CMD;
+	cmd->command = set_path_name(mini, current->token);
+	cmd->filename = NULL;
+	cmd->num_args = get_num_args(current->token);
+	cmd->args = set_arg_array(cmd->num_args, current->token, cmd->command);
+	cmd->next = NULL;
+	return (cmd);
 }
 
 char **set_arg_array(int num_args, char *token, char *cmdpath)
@@ -54,15 +75,15 @@ char **set_arg_array(int num_args, char *token, char *cmdpath)
 	return (args);
 }
 
-char *set_path_name(char *token, t_shell *mini)
+char *set_path_name(t_shell *mini, char *token)
 {
 	char	**path_dirs;
 	char	*command;
 	char	*path;
 	int		i;
-	
+
 	i = 0;
-	command = ft_substr(token, 0, ft_strchr(token, 32) - token);
+	command = ft_substr(token, 0, ft_strchr(token, ' ') - token);
 	path_dirs = ft_split(extract_env_value(mini->initenv, "PATH"), ':');
 	if (!path_dirs)
 		return (NULL);
@@ -74,10 +95,10 @@ char *set_path_name(char *token, t_shell *mini)
 			return (NULL);
 		if (access(path, X_OK) == 0)
 			return (path);
-		i++; 
+		i++;
 	}
 	if (access(path, X_OK) == -1)
-	{	
+	{
 		if (builtin_cmd(command))
 			return (NULL);
 		else
