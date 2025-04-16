@@ -12,7 +12,7 @@ int activate_shell(char *input, t_initenv *env)
 	mini->initenv = env;
 	mini->trim = NULL;
 	mini->status = 0;
-	if((status = input_validate(input)))
+	if((status = input_validate(&input)))
 		return (1);
 	if((status = extract_tokens(&mini->tokens, input)))
 		return (1);

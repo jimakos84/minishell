@@ -12,6 +12,10 @@ int parse_and_expand(t_shell *mini)
 	//char	*cmd;
 
 	expand(mini, mini->tokens);
+
+	/**
+	 * Need to look in to this part as we are getting a segfault if we un comment this
+	 **/
 	// cmd = mini->cmds->cmd;
 	// if(!mini->cmds->command || builtin_cmd(cmd))
 	// {

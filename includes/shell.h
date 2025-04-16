@@ -70,13 +70,13 @@ void print(t_list *list, char *msg);
 /**
  * Implementaion in srcs/validate.c
 */
-int 	input_validate(char *input);
+int 	input_validate(char **input);
 //char 	*in_quotes(char *input);
 
 /**
  * Implementaion in srcs/error.c
 */
-int 	syntax_error(char *msg);
+int syntax_error(char *input, char *msg);
 
 /**
  * Implementation in srcs/helper.c
