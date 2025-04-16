@@ -43,8 +43,8 @@ void expand(t_shell *mini, t_list *list)
 		else
 			cmd = handel_pipe(mini, current);
 		mini->cmds = list_add_command(mini->cmds, cmd);
-		cmd = NULL;
 		mini->num_cmds++;
+		cmd = NULL;
 		current = current->next;
 	}
 }
