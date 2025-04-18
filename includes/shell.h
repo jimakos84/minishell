@@ -16,8 +16,9 @@
 # include "../ft_libft/ft_printf.h"
 # include "../ft_libft/get_next_line.h"
 
-# define SMPL_CMD 1
-# define OPRD_CMD 2
+# define SMPL_CMD 1 // For simple command
+# define OPRD_CMD 2 // For output redirect command ">"
+# define APRD_CMD 3 // For output redirect append command ">>"
 
 /**
  * data node strucutre to hold the tokens extract from input, this node will make a linked list
