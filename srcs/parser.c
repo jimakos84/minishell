@@ -56,6 +56,7 @@ t_cmd *handel_pipe(t_shell *mini, t_list *current)
 			return (NULL);
 	cmd->type = SMPL_CMD;
 	cmd->cmd = get_command(current->token);
+	printf("cmd->cmd:%s\n", cmd->cmd);
 	cmd->command = set_path_name(mini, current->token);
 	cmd->filename = NULL;
 	cmd->num_args = get_num_args(current->token);
@@ -85,9 +86,22 @@ char *set_path_name(t_shell *mini, char *token)
 
 	i = 0;
 	command = ft_substr(token, 0, ft_strchr(token, ' ') - token);
-	path_dirs = ft_split(extract_env_value(mini->initenv, "PATH"), ':');
+	path = command;
+	if (access(path, X_OK) == 0)
+		return (path);
+	else
+		path = NULL;
+	char *path_value = extract_env_value(mini->initenv, "PATH");
+	if (!path_value)
+	{
+    	if (!builtin_cmd(command))
+    	    printf("%s: command not found\n", command);
+   		free(command);
+   		return (NULL);
+	}
+	path_dirs = ft_split(path_value, ':');
 	if (!path_dirs)
-		return (NULL);
+    	return (NULL);
 	while (path_dirs && path_dirs[i])
 	{
 		path = ft_strjoin(path_dirs[i], "/");
