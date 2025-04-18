@@ -9,23 +9,23 @@ char **set_arg_array(int num_args, char *token, char *cmdpath);
 
 int parse_and_expand(t_shell *mini)
 {
-	//char	*cmd;
 
 	expand(mini, mini->tokens);
 
 	/**
 	 * Need to look in to this part as we are getting a segfault if we un comment this
 	 **/
-	// cmd = mini->cmds->cmd;
-	// if(!mini->cmds->command || builtin_cmd(cmd))
-	// {
+	if (mini->cmds->cmd)
+	{
+		if(!mini->cmds->command || builtin_cmd(mini->cmds->cmd))
+		{
 
-	// 	if (check_builtin(mini) == 2)
-	// 		return (2);
-	// 	else
-	// 		return (1);
-
-	// }
+			if (check_builtin(mini) == 2)
+				return (2);
+			else
+				return (1);
+		}
+	}
 	return (0);
 }
 
@@ -55,6 +55,7 @@ t_cmd *handel_pipe(t_shell *mini, t_list *current)
 	if(!cmd)
 			return (NULL);
 	cmd->type = SMPL_CMD;
+	cmd->cmd = get_command(current->token);
 	cmd->command = set_path_name(mini, current->token);
 	cmd->filename = NULL;
 	cmd->num_args = get_num_args(current->token);
