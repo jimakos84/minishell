@@ -4,6 +4,7 @@ int ft_isspace(int c);
 static char *set_filename(char *token);
 static char *set_arg_string(char *token);
 static char *get_arg_string(char *token);
+static int set_command_type(char *token);
 
 
 t_cmd *handel_output(t_shell *mini, char *token)
@@ -16,7 +17,7 @@ t_cmd *handel_output(t_shell *mini, char *token)
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if(!cmd)
 		return (NULL);
-	cmd->type = OPRD_CMD;
+	cmd->type = set_command_type(token);
 	cmd->command = set_path_name(mini, arg_str);
 	cmd->filename = set_filename(token);
 	cmd->num_args = get_num_args(arg_str);
@@ -26,10 +27,36 @@ t_cmd *handel_output(t_shell *mini, char *token)
 	return (cmd);
 }
 
+static int set_command_type(char *token)
+{
+	char *s1 = NULL, *s2 = NULL;
+	if(token)
+	{
+		s1 = ft_strtrim(token, " \f\n\t\v\r");
+		s2 = ft_strchr(s1, '>');
+		if(s2[0] == '>')
+		{
+			if (s2[1] && s2[1] == '>')
+				return (APRD_CMD);
+			return(OPRD_CMD);
+		}
+		else
+		{
+			return (SMPL_CMD);
+		}
+	}
+	else
+	{
+		return (0);
+	}
+}
+
 static char *set_filename(char *token)
 {
 	int i = 1, start = 0;
 	char *str = ft_strchr(token, '>'), c, *res;
+	while(str && str[i] && str[i] == '>')
+		i++;
 	while(str && str[i] && ft_isspace(str[i]))
 		i++;
 	start = i;

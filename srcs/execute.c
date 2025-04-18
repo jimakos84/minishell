@@ -32,12 +32,26 @@ int execute(t_shell *mini)
 				}
 				close(fd);
 			}
+			if(current->type == APRD_CMD)
+			{
+				int fd;
+				if ((fd = open(current->filename, O_WRONLY | O_CREAT | O_APPEND, 0666)) == -1) {
+					perror("File opening failed!");
+					exit (1);
+				}
+				if(dup2(fd, STDOUT_FILENO) == -1)
+				{
+					perror("FD duplication failed!");
+					exit (1);
+				}
+				close(fd);
+			}
 			if(index > 0)
 				dup2(fd[index - 1][0], STDIN_FILENO);
 			if(current->next)
 				dup2(fd[index][1], STDOUT_FILENO);
 			close_fds(fd, limit);
-			printf("command : %s\n", current->command);
+			//printf("command : %s\n", current->command);
 			if((execve(current->command, current->args, mini->initenv->copy_env)) == -1)
 			{
 				perror("Command execution failed");

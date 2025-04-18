@@ -84,7 +84,6 @@ char *set_path_name(t_shell *mini, char *token)
 
 	i = 0;
 	command = ft_substr(token, 0, ft_strchr(token, ' ') - token);
-	printf("command:%s\n", command);
 	path_dirs = ft_split(extract_env_value(mini->initenv, "PATH"), ':');
 	if (!path_dirs)
 		return (NULL);
