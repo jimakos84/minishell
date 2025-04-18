@@ -52,14 +52,25 @@ static char *set_filename(char *token)
 
 static char *set_arg_string(char *token)
 {
-	char *s1 = ft_strchr(token, '>');
-	char *s2 = ft_strnmdup(token, 0, s1 - token);
-	char *s3 = ft_strtrim(s2, " \f\n\t\v\r");
-	char *s4 = get_arg_string(s1);
-	char *s5 = ft_strjoin(s3, s4);
-	free(s2);
-	free(s3);
-	free(s4);
+	char *s1 = NULL, *s2 = NULL, *s3 = NULL ,*s4 = NULL, *s5 = NULL;
+	s1 = ft_strchr(token, '>');
+	s2 = ft_strnmdup(token, 0, s1 - token);
+	if(s2)
+	{
+		s3 = ft_strtrim(s2, " \f\n\t\v\r");
+		s4 = get_arg_string(s1);
+		s5 = ft_strjoin(s3, s4);
+		free(s2);
+		free(s3);
+		free(s4);
+	}
+	else
+	{
+		s4 = get_arg_string(s1);
+		s5 = ft_strjoin(s2, s4);
+		free(s3);
+		free(s4);
+	}
 	return (s5);
 }
 
