@@ -56,7 +56,6 @@ t_cmd *handel_pipe(t_shell *mini, t_list *current)
 			return (NULL);
 	cmd->type = SMPL_CMD;
 	cmd->cmd = get_command(current->token);
-	printf("cmd->cmd:%s\n", cmd->cmd);
 	cmd->command = set_path_name(mini, current->token);
 	cmd->filename = NULL;
 	cmd->num_args = get_num_args(current->token);
