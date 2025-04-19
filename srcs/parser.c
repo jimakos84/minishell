@@ -9,17 +9,11 @@ char **set_arg_array(int num_args, char *token, char *cmdpath);
 
 int parse_and_expand(t_shell *mini)
 {
-
 	expand(mini, mini->tokens);
-
-	/**
-	 * Need to look in to this part as we are getting a segfault if we un comment this
-	 **/
 	if (mini->cmds->cmd)
 	{
 		if(!mini->cmds->command || builtin_cmd(mini->cmds->cmd))
 		{
-
 			if (check_builtin(mini) == 2)
 				return (2);
 			else
@@ -40,6 +34,8 @@ void expand(t_shell *mini, t_list *list)
 			cmd = handle_quoted(mini, current->token);
 		else if(ft_strchr(current->token, '>'))
 			cmd = handel_output(mini, current->token);
+		else if(ft_strchr(current->token, '<'))
+			cmd = handel_input(mini, current->token);
 		else
 			cmd = handel_pipe(mini, current);
 		mini->cmds = list_add_command(mini->cmds, cmd);

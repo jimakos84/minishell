@@ -1,0 +1,3 @@
+*.o 	# no object files please
+*.txt	# no text flies please
+*.a		# no dynamic library please

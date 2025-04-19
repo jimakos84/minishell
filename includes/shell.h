@@ -19,6 +19,7 @@
 # define SMPL_CMD 1 // For simple command
 # define OPRD_CMD 2 // For output redirect command ">"
 # define APRD_CMD 3 // For output redirect append command ">>"
+# define IPRD_CMD 4 // For input redirect command "<"
 
 /**
  * data node strucutre to hold the tokens extract from input, this node will make a linked list
@@ -94,29 +95,45 @@ int 	extract_tokens(t_list **tokens, char *input);
 /**
  * Implementation in srcs/parser.c
 */
-int 	parse_and_expand(t_shell *mini);
+int parse_and_expand(t_shell *mini);
+t_cmd *handel_pipe(t_shell *mini, t_list *current);
 
 /**
  * Implementaion in srcs/utils.c
 */
-int 	ft_strnmcpy(char **dest, char *src, int n, int m);
+int ft_strnmcpy(char **dest, char *src, int n, int m);
 char *ft_strnmdup(char const *src, int n , int m);
 
 /**
  * Implementaion in srcs/execute.c
 */
-int 	execute(t_shell *mini);
+int execute(t_shell *mini);
 
 /**
  * Implementaion in srcs/cleaner.c
 */
-int 	clear_and_exit(t_shell *mini);
+int clear_and_exit(t_shell *mini);
 
 
 /**
  * Implementaion in srcs/signal.c
 */
-void 	init_sig(void);
+void init_sig(void);
+
+/**
+ * Implementaion in srcs/redirect.c
+*/
+char *set_filename(char *token, int ch);
+char *set_filename(char *token, int ch);
+char *set_arg_string(char *token, int ch);
+char *get_arg_string(char *token);
+int set_command_type(char *token);
+
+/**
+ * Implementaion in srcs/input.c
+ */
+t_cmd *handel_output(t_shell *mini, char *token);
+t_cmd *handel_input(t_shell *mini, char *token);
 
 t_env	*new_node(char *content);
 void	add_to_list(t_env **env, char *content);
@@ -135,8 +152,7 @@ bool	builtin_cmd(char *cmd);
 void    builtin_unset(t_shell *mini, char *unset);
 
 int	ft_isspace(int c);
-t_cmd *handel_pipe(t_shell *mini, t_list *current);
-t_cmd *handel_output(t_shell *mini, char *token);
+
 t_cmd *handle_quoted(t_shell *mini, char *token);
 char *enclosed_in_quotes(char *input);
 int check_if_quoted(char *input);

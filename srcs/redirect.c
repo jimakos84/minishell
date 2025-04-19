@@ -1,11 +1,9 @@
 #include "../includes/shell.h"
 
-int ft_isspace(int c);
-static char *set_filename(char *token);
-static char *set_arg_string(char *token);
-static char *get_arg_string(char *token);
-static int set_command_type(char *token);
-
+char *set_filename(char *token, int ch);
+char *set_arg_string(char *token, int ch);
+char *get_arg_string(char *token);
+int set_command_type(char *token);
 
 t_cmd *handel_output(t_shell *mini, char *token)
 {
@@ -13,13 +11,13 @@ t_cmd *handel_output(t_shell *mini, char *token)
 	 * example of the command format
 	 * echo "the string need to write in to the file" > file.txt
 	*/
-	char *arg_str = set_arg_string(token);
+	char *arg_str = set_arg_string(token, '>');
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if(!cmd)
 		return (NULL);
 	cmd->type = set_command_type(token);
 	cmd->command = set_path_name(mini, arg_str);
-	cmd->filename = set_filename(token);
+	cmd->filename = set_filename(token, '>');
 	cmd->num_args = get_num_args(arg_str);
 	cmd->args = set_arg_array(cmd->num_args, arg_str, cmd->command);
 	cmd->next = NULL;
@@ -27,18 +25,23 @@ t_cmd *handel_output(t_shell *mini, char *token)
 	return (cmd);
 }
 
-static int set_command_type(char *token)
+int set_command_type(char *token)
 {
 	char *s1 = NULL, *s2 = NULL;
 	if(token)
 	{
 		s1 = ft_strtrim(token, " \f\n\t\v\r");
 		s2 = ft_strchr(s1, '>');
-		if(s2[0] == '>')
+		if(s2 && s2[0] == '>')
 		{
 			if (s2[1] && s2[1] == '>')
 				return (APRD_CMD);
 			return(OPRD_CMD);
+		}
+		s2 = ft_strchr(s1, '<');
+		if(s2 && s2[0] == '<')
+		{
+			return (IPRD_CMD);
 		}
 		else
 		{
@@ -51,11 +54,11 @@ static int set_command_type(char *token)
 	}
 }
 
-static char *set_filename(char *token)
+char *set_filename(char *token, int ch)
 {
 	int i = 1, start = 0;
-	char *str = ft_strchr(token, '>'), c, *res;
-	while(str && str[i] && str[i] == '>')
+	char *str = ft_strchr(token, ch), c, *res;
+	while(str && str[i] && str[i] == ch)
 		i++;
 	while(str && str[i] && ft_isspace(str[i]))
 		i++;
@@ -77,10 +80,10 @@ static char *set_filename(char *token)
 	return (res);
 }
 
-static char *set_arg_string(char *token)
+char *set_arg_string(char *token, int ch)
 {
 	char *s1 = NULL, *s2 = NULL, *s3 = NULL ,*s4 = NULL, *s5 = NULL;
-	s1 = ft_strchr(token, '>');
+	s1 = ft_strchr(token, ch);
 	s2 = ft_strnmdup(token, 0, s1 - token);
 	if(s2)
 	{
@@ -101,7 +104,7 @@ static char *set_arg_string(char *token)
 	return (s5);
 }
 
-static char *get_arg_string(char *token)
+char *get_arg_string(char *token)
 {
 	int i = 0;
 	char *res = NULL;
