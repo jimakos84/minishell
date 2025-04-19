@@ -46,6 +46,21 @@ int execute(t_shell *mini)
 				}
 				close(fd);
 			}
+			if(current->type == IPRD_CMD)
+			{
+				int fd;
+				if((fd = open(current->filename, O_RDONLY)) == -1)
+				{
+					perror("File opening failed!");
+					exit (1);
+				}
+				if(dup2(fd, STDIN_FILENO) == -1)
+				{
+					perror("FD duplication failed!");
+					exit (1);
+				}
+				close(fd);
+			}
 			if(index > 0)
 				dup2(fd[index - 1][0], STDIN_FILENO);
 			if(current->next)
