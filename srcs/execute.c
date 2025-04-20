@@ -46,7 +46,7 @@ int execute(t_shell *mini)
 				}
 				close(fd);
 			}
-			if(current->type == IPRD_CMD)
+			if(current->type == IPRD_CMD || current->type == HDRD_CMD)
 			{
 				int fd;
 				if((fd = open(current->filename, O_RDONLY)) == -1)

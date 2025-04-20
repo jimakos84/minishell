@@ -41,6 +41,8 @@ int set_command_type(char *token)
 		s2 = ft_strchr(s1, '<');
 		if(s2 && s2[0] == '<')
 		{
+			if (s2[1] && s2[1] == '<')
+				return(HDRD_CMD);
 			return (IPRD_CMD);
 		}
 		else

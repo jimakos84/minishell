@@ -20,6 +20,9 @@
 # define OPRD_CMD 2 // For output redirect command ">"
 # define APRD_CMD 3 // For output redirect append command ">>"
 # define IPRD_CMD 4 // For input redirect command "<"
+# define HDRD_CMD 5 // For input heredoc redirect command "<<"
+
+# define CACHE "cache.txt"
 
 /**
  * data node strucutre to hold the tokens extract from input, this node will make a linked list
@@ -131,9 +134,15 @@ int set_command_type(char *token);
 
 /**
  * Implementaion in srcs/input.c
- */
+*/
 t_cmd *handel_output(t_shell *mini, char *token);
 t_cmd *handel_input(t_shell *mini, char *token);
+
+
+/**
+ * Implementaion in srcs/heredoc.c
+*/
+t_cmd *handle_heredoc(t_shell *mini, t_cmd *cmd, char *token);
 
 t_env	*new_node(char *content);
 void	add_to_list(t_env **env, char *content);
