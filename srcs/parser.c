@@ -43,7 +43,7 @@ void handle_dollar(t_list *list, t_shell *mini)
         return ;
     while (token[i]) {
         if (token[i] == '$') {
-            i++; 
+            i++;
 	 	var_start = i;
         while (token[i] && (ft_isalnum(token[i]) || token[i] == '_'))
             i++;
@@ -51,8 +51,8 @@ void handle_dollar(t_list *list, t_shell *mini)
         char var_name[var_len + 1];
         ft_strlcpy(var_name, token + var_start, var_len + 1);
 		var_value = extract_env_value(mini->initenv, var_name);
-		k = 0;	
-        while (var_value[k]) 
+		k = 0;
+        while (var_value[k])
             expanded_token[j++] = var_value[k++];
         } else
             expanded_token[j++] = token[i++];
@@ -91,7 +91,7 @@ t_cmd *handel_pipe(t_shell *mini, t_list *current)
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if(!cmd)
 			return (NULL);
-	cmd->type = SMPL_CMD;
+	cmd->type = set_command_type(current->token);
 	cmd->cmd = get_command(current->token);
 	cmd->command = set_path_name(mini, current->token);
 	cmd->filename = NULL;

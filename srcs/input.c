@@ -6,10 +6,13 @@ t_cmd *handel_input(t_shell *mini, char *token)
 	 * example of the command format
 	 * cat < file.txt
 	*/
-	char *arg_str = set_arg_string(token, '<');
 	t_cmd *cmd = malloc(sizeof(t_cmd));
 	if(!cmd)
 		return (NULL);
+	char *str = ft_strchr(token, '<');
+	if(str && str[1] && str[1] == '<')
+		return(handle_heredoc(mini, cmd, token));
+	char *arg_str = set_arg_string(token, '<');
 	cmd->type = set_command_type(token);
 	cmd->command = set_path_name(mini, arg_str);
 	cmd->filename = set_filename(token, '<');

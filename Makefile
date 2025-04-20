@@ -19,6 +19,7 @@ SRCS = \
 	srcs/error.c\
 	srcs/execute.c\
 	srcs/helper.c\
+	srcs/heredoc.c\
 	srcs/parser.c\
 	srcs/signal.c\
 	srcs/token.c\
