@@ -96,7 +96,7 @@ char	*extract_env_value(t_initenv *initenv, char *name)
 			return (temp->value);
 		temp = temp->next;
 	}
-	return (NULL);
+	return ("");
 }
 
 /**
