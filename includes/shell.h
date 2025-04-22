@@ -81,7 +81,7 @@ int 	input_validate(char **input);
 /**
  * Implementaion in srcs/error.c
 */
-int syntax_error(char *input, char *msg);
+int syntax_error(char *input, char *msg, int code);
 
 /**
  * Implementation in srcs/helper.c
