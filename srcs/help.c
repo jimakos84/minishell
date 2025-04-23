@@ -1,26 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dvlachos <dvlachos@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/21 11:13:11 by dvlachos          #+#    #+#             */
+/*   Updated: 2025/04/21 11:13:13 by dvlachos         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int main(void)
+#include "../includes/shell.h"
+
+int		ft_lst_len(t_env *env)
 {
-	char *cwd;
-	char *path = "/home/tsomacha/philosopher/philo";
+	t_env	*temp;
+	int		len;
 
-	if(((cwd = getcwd(NULL, 0)) == NULL))
+	len = 0;
+	temp = env;
+	while (temp)
 	{
-		printf("Error \n");
-		return (EXIT_FAILURE);
+		len++;
+		temp = temp->next;
 	}
-	printf("path : %s\n", cwd);
-	free(cwd);
-	chdir(path);
-	if(((cwd = getcwd(NULL, 0)) == NULL))
-	{
-		printf("Error \n");
-		return (EXIT_FAILURE);
-	}
-	printf("path : %s\n", cwd);
-	free(cwd);
-	return (EXIT_SUCCESS);
+	return (len);
 }

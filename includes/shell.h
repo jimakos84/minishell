@@ -147,7 +147,7 @@ t_cmd *handle_heredoc(t_shell *mini, t_cmd *cmd, char *token);
 t_env	*new_node(char *content);
 void	add_to_list(t_env **env, char *content);
 void	list_env(t_env **env, char **envp);
-char	**copy_env(char **envp);
+char	**copy_env(t_env *env);
 char	*extract_env_value(t_initenv *initenv, char *name);
 int		builtin_cd(t_shell *mini);
 int		builtin_env(t_shell *mini);
@@ -158,7 +158,7 @@ char 	*get_command(char *token);
 int		tokenize(t_shell *mini, char *input);
 int		quotes_checker(char *input, int len);
 bool	builtin_cmd(char *cmd);
-void    builtin_unset(t_shell *mini, char *unset);
+void    builtin_unset(t_shell *mini, char **unset_args);
 
 int	ft_isspace(int c);
 
@@ -169,4 +169,5 @@ char *remove_quotes(char *str);
 char *set_path_name(t_shell *mini, char *token);
 int get_num_args(char *token);
 char **set_arg_array(int num_args, char *token, char *cmdpath);
+int		ft_lst_len(t_env *env);
 #endif

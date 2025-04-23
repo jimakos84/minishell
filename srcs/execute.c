@@ -66,6 +66,7 @@ int execute(t_shell *mini)
 			if(current->next)
 				dup2(fd[index][1], STDOUT_FILENO);
 			close_fds(fd, limit);
+			mini->initenv->copy_env = copy_env(mini->initenv->env);
 			if((execve(current->command, current->args, mini->initenv->copy_env)) == -1)
 				exit(1);
 		}

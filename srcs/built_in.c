@@ -120,21 +120,17 @@ int	check_builtin(t_shell *mini)
 				return (2);
 	    }
 		if (ft_strncmp("pwd", cmd, sizeof(cmd)) == 0)
-		{
-			if (builtin_pwd())
-				return (1);
-			else
-				return (2);
-		}
+			printf("%s\n", getcwd(NULL, 0));
 		if (ft_strncmp("exit", cmd, sizeof(cmd)) == 0)
 		{
 			printf("exit\n");
+			clear_and_exit(mini);
 			exit (mini->status);
 		}
 		if (ft_strncmp("unset", cmd, sizeof(cmd)) == 0)
 		{
-			builtin_unset(mini, cmd);
-			return (2);
+			builtin_unset(mini, mini->cmds->args);
+			return (0);
 		}
 	    else
 		    return (0);

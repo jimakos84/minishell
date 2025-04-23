@@ -1,29 +1,40 @@
 #include "../includes/shell.h"
 
-void    remove_env_node(t_env *env, char *key)
+static void    remove_env_nodes(t_shell *mini, char *unset)
 {
-    char    *env_key;
-    //t_env   *temp;
+    t_env   *current;
+    t_env   *prev;
 
-    if (!env || !key)
-        return ;
-    env_key = env->name;
-    if (ft_strncmp(env_key, key, ft_strlen(key)) == 0)
-        return ;
-
-
-}
-void    builtin_unset(t_shell *mini, char *unset)
-{
-    t_initenv   env;
-
-    env = *mini->initenv;
-
-    printf("%s\n", extract_env_value(&env, "TERM"));
+    current = mini->initenv->env;
+    prev = NULL;
     if (!unset)
         return ;
-    if (!mini->initenv->env || !extract_env_value(mini->initenv, unset))
+    while (current)
+    {
+        if (ft_strncmp(current->name, unset, ft_strlen(unset)) == 0)
+        {
+            if (prev)
+                prev->next = current->next;
+             else
+                mini->initenv->env = current->next;
+            free(current->name);
+            if (current->value)
+              free(current->value);
+            free(current);
+            return ;
+        }
+        prev = current;
+        current = current->next;
+    }
+}
+
+void    builtin_unset(t_shell *mini, char **unset)
+{
+    int     i;
+
+    i = 1;
+    if (!unset)
         return ;
-    else    
-        return ;
+    while (unset[i])
+        remove_env_nodes(mini, unset[i++]);
 }

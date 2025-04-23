@@ -54,27 +54,33 @@ void	list_env(t_env **env, char **envp)
 /**
  * creating a copy of envp 2D array
 */
-char	**copy_env(char **envp)
+char	**copy_env(t_env *env)
 {
 	int		len;
 	int		i;
 	char	**copy;
+	t_env	*tmp;
 
-	len = ft_arraylen(envp);
+	tmp = env;
+	len = ft_lst_len(env);
 	copy = (char **)malloc((len + 1) * sizeof(char *));
 	if (!copy)
 		return (NULL);
 	i = 0;
-	while (envp && envp[i])
+	while (tmp)
 	{
-		copy[i] = ft_strdup(envp[i]);
-		if (!copy[i])
+		if (tmp->name)
 		{
-			while (i > 0)
-				free(copy[--i]);
-			free(copy);
-			return (NULL);
-		}
+			if (tmp->value)
+			{
+				copy[i] = ft_strdup(tmp->name);
+				copy[i] = ft_strjoin(copy[i], "=");
+				copy[i] = ft_strjoin(copy[i], tmp->value);
+			}
+			else
+				copy[i] = ft_strdup(tmp->name);
+		}	
+		tmp = tmp->next;
 		i++;
 	}
 	copy[i] = NULL;
