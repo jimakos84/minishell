@@ -13,8 +13,6 @@ These limitations reflect both project constraints and OS-specific dependencies,
 
 ### How to install and use
 
-### How to install and use
-
 #### 🔧 Installation
 
 1. **Clone the repository:**
